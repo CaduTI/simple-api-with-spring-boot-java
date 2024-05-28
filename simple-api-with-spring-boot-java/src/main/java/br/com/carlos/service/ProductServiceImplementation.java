@@ -56,11 +56,9 @@ public  class ProductServiceImplementation implements ProductService {
 	}
 	
 	public void deleteProduct(Integer idProduto) {
-		for(int i = 0; i < listaProdutos.size()-1; i++) {
+		for(int i = 0; i < listaProdutos.size(); i++) {
 			if(listaProdutos.get(i).getId() == idProduto) {
-				listaProdutos.get(i).setId(null);
-				listaProdutos.get(i).setName(null);
-				listaProdutos.get(i).setPrice(null);
+				listaProdutos.remove(i);
 			}
 		}
 	}
