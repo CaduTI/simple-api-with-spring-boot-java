@@ -1,14 +1,12 @@
 package br.com.carlos.service;
 
 import java.util.List;
-import java.util.Map;
-
-import br.com.carlos.model.Product;
+import br.com.carlos.data.vo.v1.ProductVO;
 
 public interface ProductService {
-	List<Product> getProducts();
-	Product getProduct(Integer id);
-	Map<String, Object> createProduct(Integer id, String name, Integer price);
-	Product updateProduct(Product product);
+	List<ProductVO> getProducts();
+	ProductVO getProduct(Integer id);
+	ProductVO createProduct(ProductVO product);
+	ProductVO updateProduct(ProductVO product);
 	void deleteProduct(Integer id);
 }

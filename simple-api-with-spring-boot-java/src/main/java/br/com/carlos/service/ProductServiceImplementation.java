@@ -1,66 +1,53 @@
 package br.com.carlos.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.carlos.data.vo.v1.ProductVO;
+import br.com.carlos.exceptions.ResourceNotFoundException;
+import br.com.carlos.mapper.DozerMapper;
 import br.com.carlos.model.Product;
+import br.com.carlos.repository.ProductRepository;
 
 @Service
 public  class ProductServiceImplementation implements ProductService {
-
-	public ProductServiceImplementation() {
-		listaProdutos.add(new Product(1, "Poco X6 PRO", 2200));
-		listaProdutos.add(new Product(2, "Red Magic 9", 5700));
-		listaProdutos.add(new Product(3, "Samsung 23", 4499));
-	}
-
-	List<Product> listaProdutos = new ArrayList<Product>();
+	@Autowired
+	ProductRepository repository;
 	
-	public List<Product> getProducts() {
-		return listaProdutos;
-	}
-
-	public Product getProduct(Integer id) {
-		Iterator<Product> iterator = listaProdutos.iterator();
-		while (iterator.hasNext()) {
-			Product product = iterator.next();
-			if (product.getId().equals(id)) {
-				return product;
-			}
-		}
-		return null;
+	public List<ProductVO> getProducts() {
+		return DozerMapper.parseListObjects(repository.findAll(), ProductVO.class);
 	}
 	
-	public Map<String, Object> createProduct(Integer id, String name, Integer price) {
-		listaProdutos.add(new Product( id,  name,  price));
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("status", "Produto adicionado com sucesso");
-		return map;
+	public ProductVO getProduct(Integer id) {
+		var entity = repository.findById(id)
+				.orElseThrow((() -> new ResourceNotFoundException("No records found for this ID!")));
+		return DozerMapper.parseObject(entity, ProductVO.class);
+	}
+	public ProductVO createProduct(ProductVO produto) {
 		
+		var entity = DozerMapper.parseObject(produto, Product.class);
+		System.out.println(produto);
+		System.out.println(entity);
+		var vo = DozerMapper.parseObject(repository.save(entity), ProductVO.class);
+		return vo;
 	}
 	
-	
-	public Product updateProduct(Product produtoUsuario) {
-		for(int i = 0; i< listaProdutos.size(); i++) {
-			if(listaProdutos.get(i).getId() == produtoUsuario.getId()) {
-				listaProdutos.get(i).setName(produtoUsuario.getName());
-				listaProdutos.get(i).setPrice(produtoUsuario.getPrice());
-			}
-		}
-		return produtoUsuario;
+	public ProductVO updateProduct(ProductVO produto) {
+		
+		var entity = repository.findById(produto.getId())
+				.orElseThrow((() -> new ResourceNotFoundException("No records found for this ID!")));
+		
+		entity.setName(produto.getName());
+		entity.setPrice(produto.getPrice());
+		var vo = DozerMapper.parseObject(repository.save(entity), ProductVO.class);
+		return vo;
 	}
 	
 	public void deleteProduct(Integer idProduto) {
-		for(int i = 0; i < listaProdutos.size(); i++) {
-			if(listaProdutos.get(i).getId() == idProduto) {
-				listaProdutos.remove(i);
-			}
-		}
+		var entitySearch = repository.findById(idProduto)
+				.orElseThrow((() -> new ResourceNotFoundException("No records found for this ID!")));
+		
+		repository.delete(entitySearch);
 	}
-
 }

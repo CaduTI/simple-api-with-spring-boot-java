@@ -1,37 +1,23 @@
-package br.com.carlos.model;
+package br.com.carlos.data.vo.v1;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
-@Entity
-@Table(name = "Product")
-public class Product implements Serializable{
+public class ProductVO implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
 
-	@Column(name = "name", nullable = false, length = 50)
+	private Integer id;
 	private String name;
-	
-	@Column(name = "price")
 	private Integer price;
 	
-	public Product(Integer id, String name, Integer price) {
+	public ProductVO(Integer id, String name, Integer price) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		}
 	
-	public Product() {
+	public ProductVO() {
 	}
 	
 	public Integer getId() {
@@ -71,7 +57,7 @@ public class Product implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Product other = (Product) obj;
+		ProductVO other = (ProductVO) obj;
 		return Objects.equals(id, other.id) && Objects.equals(name, other.name) && Objects.equals(price, other.price);
 	}
 	
