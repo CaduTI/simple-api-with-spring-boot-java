@@ -1,0 +1,1 @@
+INSERT INTO `product` VALUES (1,'Poco x5',1450),(2,'Poco x6 PRO',2299),(4,'Red Magic 9 PRO',5379);

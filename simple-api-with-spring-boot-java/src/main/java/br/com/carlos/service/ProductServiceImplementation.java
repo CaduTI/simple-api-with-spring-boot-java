@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.carlos.data.vo.v1.ProductVO;
+import br.com.carlos.data.vo.v2.ProductVOV2;
 import br.com.carlos.exceptions.ResourceNotFoundException;
 import br.com.carlos.mapper.DozerMapper;
+import br.com.carlos.mapper.custom.ProductMapper;
 import br.com.carlos.model.Product;
 import br.com.carlos.repository.ProductRepository;
 
@@ -14,6 +16,9 @@ import br.com.carlos.repository.ProductRepository;
 public  class ProductServiceImplementation implements ProductService {
 	@Autowired
 	ProductRepository repository;
+	
+	@Autowired
+	ProductMapper mapper;
 	
 	public List<ProductVO> getProducts() {
 		return DozerMapper.parseListObjects(repository.findAll(), ProductVO.class);
@@ -33,6 +38,15 @@ public  class ProductServiceImplementation implements ProductService {
 		return vo;
 	}
 	
+	public ProductVOV2 createProductV2(ProductVOV2 produto) {
+		
+		var entity = mapper.convertVOToEntity(produto);
+		System.out.println(produto);
+		System.out.println(entity);
+		var vo = mapper.convertEntityToVO(repository.save(entity));
+		return vo;
+	}
+
 	public ProductVO updateProduct(ProductVO produto) {
 		
 		var entity = repository.findById(produto.getId())

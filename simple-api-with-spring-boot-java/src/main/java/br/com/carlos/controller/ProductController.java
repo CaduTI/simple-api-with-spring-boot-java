@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.carlos.data.vo.v1.ProductVO;
-import br.com.carlos.model.Product;
+import br.com.carlos.data.vo.v2.ProductVOV2;
 import br.com.carlos.service.ProductService;
 
 @RestController
@@ -38,6 +38,15 @@ public class ProductController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ProductVO createProduct(@RequestBody ProductVO product){
 		return productService.createProduct(product);
+		
+	}
+	
+
+	@PostMapping(value = "/v2",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ProductVOV2 createProductV2(@RequestBody ProductVOV2 product){
+		return productService.createProductV2(product);
 		
 	}
 	
